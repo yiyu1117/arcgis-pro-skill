@@ -6,7 +6,7 @@
 
 ```bash
 # 克隆到 Claude Code 技能目录（多台机器可各自克隆一份）
-git clone https://github.com/xiayule12/arcgis-pro-skill.git ~/.claude/skills/arcgis-pro
+git clone https://github.com/yiyu1117/arcgis-pro-skill.git ~/.claude/skills/arcgis-pro
 ```
 
 要求：已安装 ArcGIS Pro 或 GeoScene Pro（自带 arcpy；空间分析工具需要 Spatial Analyst 扩展许可，网络分析等同理）。
