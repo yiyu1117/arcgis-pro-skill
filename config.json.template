@@ -1,0 +1,6 @@
+{
+  "python_path": "D:/Program Files/ArcGIS/Pro/bin/Python/envs/arcgispro-py3/python.exe",
+  "arcgis_version": "3.5.4",
+  "license": "ArcInfo",
+  "note": "首次运行会自动检测并写入真实路径（ArcGIS Pro 与 GeoScene Pro 互斥）。若此路径在本机失效，按 SKILL.md「解释器路径」一节重新检测。"
+}
