@@ -10,7 +10,7 @@
 
 | 依赖 | 说明 |
 |------|------|
-| **ArcGIS Pro** 或 **GeoScene Pro**（二选一） | 自带 `arcpy` 解释器。两者**互斥，单机至多安装一个**，技能两种都支持 |
+| **ArcGIS Pro** 或 **GeoScene Pro** | 自带 `arcpy` 解释器。两者**互斥，单机至多安装一个**，技能两种都支持 |
 | **Spatial Analyst 扩展许可** | 仅使用栅格空间分析工具（坡度、掩膜提取、重分类、欧氏距离等）时需要；纯数据管理/格式转换不需要 |
 | **Claude Code** | 用于加载并运行本技能 |
 
@@ -30,7 +30,7 @@ git clone https://github.com/yiyu1117/arcgis-pro-skill.git ~/.claude/skills/arcg
 2. 检索常见安装路径下的 `*Pro/bin/Python/envs/*/python.exe`；
 3. 写入技能目录下的 `config.json`。
 
-检测结果写入的 `config.json` 属于**本机配置，不提交到仓库**（见 `.gitignore`），配置格式见仓库内的 [`config.json.template`](config.json.template)。若路径失效，按 `SKILL.md`「解释器路径」一节重新检测即可。
+配置格式见仓库内的 [`config.json.template`](config.json.template)。若路径失效，按 `SKILL.md`「解释器路径」一节重新检测即可。
 
 ---
 
@@ -129,9 +129,4 @@ git clone https://github.com/yiyu1117/arcgis-pro-skill.git ~/.claude/skills/arcg
 | `verify_sigs.py` | 用本机 arcpy 官方 doc 核对 `SKILL.md` 工具签名表的脚本 |
 | `config.json.template` | 解释器配置文件模板（本机实际配置写入 `config.json`，被 `.gitignore` 忽略） |
 
----
 
-## 范围与边界（不做什么）
-
-- **只处理磁盘上的数据**：shp/gdb/栅格的转换、投影、叠加、字段计算、批量处理；
-- **不做 ArcGIS Pro 界面控制**：缩放、开关图层、符号化、制图导出等 GUI 操作不在本技能范围内。
