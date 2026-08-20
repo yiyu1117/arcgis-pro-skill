@@ -20,13 +20,13 @@
 
 | 依赖 | 说明 |
 |------|------|
-| **ArcGIS Pro** 或 **GeoScene Pro** | 自带 `arcpy` 解释器。两者**互斥，单机至多安装一个**，技能两种都支持 |
+| **ArcGIS Pro** 或 **GeoScene Pro** | 自带 `arcpy` 解释器。 |
 | **Spatial Analyst 扩展许可** | 仅使用栅格空间分析工具（坡度、掩膜提取、重分类、欧氏距离等）时需要；纯数据管理/格式转换不需要 |
-| **Claude Code** | 用于加载并运行本技能 |
+| **Claude Code或其他AI Agent** | 用于加载并运行本技能 |
 
 ### 克隆技能
 
-将仓库克隆到 Claude Code 的技能目录（多台机器可各自克隆一份）：
+将仓库克隆到 Claude Code 的技能目录：
 
 ```bash
 git clone https://github.com/yiyu1117/arcgis-pro-skill.git ~/.claude/skills/arcgis-pro
@@ -49,9 +49,9 @@ git clone https://github.com/yiyu1117/arcgis-pro-skill.git ~/.claude/skills/arcg
 
 ### 这是什么？
 
-`arcgis-pro` 是安装在 Claude Code 里的一个技能（Skill）。当你用自然语言描述一个 GIS 任务——比如"把这 20 个 shp 转成 geojson"、"按这个行政区边界裁剪 DEM"、"算一下每个学校的 500 米缓冲区"——Claude 会调用本机 ArcGIS Pro（或国产替代软件 **GeoScene Pro**）自带的 `arcpy` 解释器，在磁盘上直接完成数据处理，全程不需要手动打开 Pro 界面点工具。
+`arcgis-pro` 是安装在 Claude Code 里的一个技能（Skill）。当你用自然语言描述一个 GIS 任务——比如"把这 20 个 shp 转成 geojson"、"按这个行政区边界裁剪 DEM"、"算一下每个学校的 500 米缓冲区"——Claude 会调用本机 ArcGIS Pro（或**GeoScene Pro**）自带的 `arcpy` 解释器，在磁盘上直接完成数据处理，全程不需要手动打开 Pro 界面点工具。
 
-它面向的是**数据层面的自动化**：格式转换、坐标系转换、叠加分析、栅格处理、批量处理，一切能写成脚本的活。
+它面向的是**数据层面的自动化**：格式转换、坐标系转换、叠加分析、栅格处理、批量处理，一切能使用arcpy或写成脚本的活。
 
 ### 设计理念
 
@@ -59,7 +59,7 @@ git clone https://github.com/yiyu1117/arcgis-pro-skill.git ~/.claude/skills/arcg
 
 1. **单步执行** —— 一次只跑一个 arcpy 操作，报错精确到具体工具，绝不写一段长脚本一次跑完（长脚本一出错只有退出码 `-1`，根本无法定位）；
 2. **声明先行** —— 每步操作前先显示 `【工具名】输入=…，参数=…`，你随时能核对它在干什么；
-3. **逐步确认** —— 拆解出的计划先整体确认，每个阶段完成暂停等你拍板，不会闷头跑偏；
+3. **逐步确认**（默认，可取消） —— 拆解出的计划先整体确认，每个阶段完成暂停等你拍板，不会闷头跑偏；
 4. **自动适配多机器** —— 解释器路径**首次运行自动检测**，ArcGIS Pro 与 GeoScene Pro 都支持（两者互斥、单机至多一个），每台机器各自自适应；
 5. **内置错误知识库** —— 常见 arcpy 报错的处置方法直接预存在技能内，报错即查即修；
 6. **修复有伦理** —— 报错必须根治，禁止换工具凑合、跳过失败数据、降低精度让任务"通过"。
@@ -113,7 +113,7 @@ git clone https://github.com/yiyu1117/arcgis-pro-skill.git ~/.claude/skills/arcg
 
 ## 支持的能力范围
 
-技能内置了覆盖三大类约 30 个常用工具的**签名速查表**；冷门工具会自动联网查官方文档（`site:pro.arcgis.com`）。
+技能内置了覆盖三大类约 30 个常用工具的**签名速查表**；冷门工具会通过联网搜索查官方文档（`site:pro.arcgis.com`）。
 
 ### 数据管理
 
