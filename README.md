@@ -4,6 +4,16 @@
 
 ---
 
+## 目录
+
+- [安装](#安装)
+- [总体介绍](#总体介绍)
+- [快速开始](#快速开始)
+- [支持的能力范围](#支持的能力范围)
+- [仓库文件说明](#仓库文件说明)
+
+---
+
 ## 安装
 
 ### 前置要求
@@ -34,15 +44,6 @@ git clone https://github.com/yiyu1117/arcgis-pro-skill.git ~/.claude/skills/arcg
 
 ---
 
-## 目录
-
-- [总体介绍](#总体介绍)
-- [快速开始](#快速开始)
-- [支持的能力范围](#支持的能力范围)
-- [仓库文件说明](#仓库文件说明)
-- [范围与边界（不做什么）](#范围与边界不做什么)
-
----
 
 ## 总体介绍
 
@@ -81,24 +82,38 @@ git clone https://github.com/yiyu1117/arcgis-pro-skill.git ~/.claude/skills/arcg
 
 ## 快速开始
 
-装好技能后，直接在 Claude Code 里用自然语言描述任务，例如：
+装好技能后，直接在 Claude Code 里用自然语言描述任务，技能会按「拆解 → 计划确认 → 逐项执行 → 每项确认 → 完成」的流程推进：先给你一份 To Do 计划等你确认，然后一步一执行、一步一报告，每个阶段完成都会停下等你检查；确认计划后你随时可以说"这几步连跑"跳过中间确认、加速执行。具体执行规则见仓库内的 `SKILL.md`。
 
 **示例 1：格式转换**
-> 把 `D:/data/各市边界` 里的所有 shapefile 批量转成 geojson，输出到 `D:/data/geojson`。
+> 把 `中国_省.geojson` 里的转为 shapefile ,提取河北省+投影到CGCS20003度带117E（图中为多任务处理的to do 1）。
+> <p align="center">
+  <img width="48%" alt="示例图1" src="https://github.com/user-attachments/assets/225f7850-c254-46e9-9ad8-159c6fae6232" />
+  <img width="48%" alt="示例图2" src="https://github.com/user-attachments/assets/8dc655ac-537d-4192-95f8-a0e0e463b4c6" />
+</p>
 
 **示例 2：矢量分析**
 > 对 `schools.shp` 做 500 米缓冲区，融合方式 ALL，输出到 `D:/data/过程/学校缓冲区`。
 
 **示例 3：栅格分析**
-> 用 `县界.shp` 裁剪 `全国DEM.tif`，投影到 CGCS2000 3 度带（4547），结果放到 `D:/data/结果/裁剪后DEM`。
+> 把38幅DEM镶嵌之后，使用河北边界裁剪，并计算坡度。
+> <img width="60%" alt="d7a7304f57c67cee501aad9a03dd66b9" src="https://github.com/user-attachments/assets/65838422-8fe9-4206-afc0-80ed8d4c7dd6" />
 
-技能会按「拆解 → 计划确认 → 逐项执行 → 每项确认 → 完成」的流程推进：先给你一份 To Do 计划等你确认，然后一步一执行、一步一报告，每个阶段完成都会停下等你检查；确认计划后你随时可以说"这几步连跑"跳过中间确认、加速执行。具体执行规则见仓库内的 `SKILL.md`。
+
+**示例 4：批量数据处理**
+> 对于多项任务，技能会先读取数据确定文件和处理情况，拆分为多个To Do 计划来处理
+> <img width="60%" alt="d1a38ee713fa7ed0eff7e04cb55173a7" src="https://github.com/user-attachments/assets/20f39387-4f36-4de5-a12a-ca1df7f87bdd" />
+
+
+**示例 5：数据下载+处理**
+> 对于需要下载的数据，技能会先在后台下载，下载完成后自动开始处理
+> <img width="60%" height="1020" alt="image" src="https://github.com/user-attachments/assets/2ea8d77b-735a-46bd-926b-5ca7ff5277bd" />
+
 
 ---
 
 ## 支持的能力范围
 
-技能内置了覆盖三大类约 30 个常用工具的**签名速查表**，参数必须照抄官方签名、禁止凭记忆；冷门工具会自动联网查官方文档（`site:pro.arcgis.com`）。
+技能内置了覆盖三大类约 30 个常用工具的**签名速查表**；冷门工具会自动联网查官方文档（`site:pro.arcgis.com`）。
 
 ### 数据管理
 
