@@ -68,7 +68,11 @@ import arcpy
 arcpy.env.overwriteOutput = True
 arcpy.env.workspace = r"D:/.../过程/..."   # 路径用正斜杠
 ```
-常用坐标系：4326 WGS84 / 3857 Web Mercator / 4490 CGCS2000 / 4547 CGCS2000_3度带_117E / 4523 CGCS2000_3度带_120E
+常用坐标系：4326 WGS84 / 3857 Web Mercator / 4490 CGCS2000 / 4548 CGCS2000_3度带_117E / 4549 CGCS2000_3度带_120E
+
+> ⚠️ **CGCS2000 3 度带编码易错**（2026-10-21 实测修正）：中央经线版自 **4534(75°E)** 起、中央经线每 3° 递增一个码，即
+> 114°E=4547、**117°E=4548**、120°E=4549、123°E=4550。带号版（坐标含带号前缀）为 4513(zone 25) 起。
+> 用 arcpy 时**必须先验证**：`print(arcpy.SpatialReference(code).name)`，看名字里的中央经线是否与预期一致，勿凭记忆写码。
 
 ### 数据管理
 | 工具 | 签名 |
@@ -78,9 +82,9 @@ arcpy.env.workspace = r"D:/.../过程/..."   # 路径用正斜杠
 | 裁剪(栅格) | `arcpy.management.Clip(in_raster, "", out_raster, in_template_dataset, "", "ClippingGeometry")` |
 | 属性选择→新文件 | `arcpy.analysis.Select(in_features, out_fc, "省='河北'")` |
 | 复制要素 | `arcpy.management.CopyFeatures(in_features, out_fc)` |
-| 投影(矢量) | `arcpy.management.Project(in_fc, out_fc, arcpy.SpatialReference(4547))` |
-| 投影(栅格) | `arcpy.management.ProjectRaster(in_raster, out_raster, arcpy.SpatialReference(4547), "BILINEAR", 30)` |
-| 定义投影 | `arcpy.management.DefineProjection(in_fc, arcpy.SpatialReference(4547))` |
+| 投影(矢量) | `arcpy.management.Project(in_fc, out_fc, arcpy.SpatialReference(4548))`  # 4548=117°E，见上 |
+| 投影(栅格) | `arcpy.management.ProjectRaster(in_raster, out_raster, arcpy.SpatialReference(4548), "BILINEAR", 30)` |
+| 定义投影 | `arcpy.management.DefineProjection(in_fc, arcpy.SpatialReference(4548))` |
 | 重采样 | `arcpy.management.Resample(in_raster, out_raster, 30, "BILINEAR")` |
 | 合并要素 | `arcpy.management.Merge(inputs=[fc1, fc2], output=out_fc)` |
 | 镶嵌栅格 | `arcpy.management.MosaicToNewRaster(input_rasters=[t1, t2], output_location, raster_name, pixel_type, cellsize, number_of_bands)` |

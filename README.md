@@ -131,7 +131,7 @@ git clone https://github.com/yiyu1117/arcgis-pro-skill.git ~/.claude/skills/arcg
 
 `SearchCursor` 逐行读取；`TableToNumPyArray` / `NumPyArrayToTable` / `NumPyArrayToFeatureClass` 完成表与数组互转，支持多行复杂逻辑。
 
-**常用坐标系预置**：`4326 WGS84`、`3857 Web Mercator`、`4490 CGCS2000`、`4547 CGCS2000_3度带_117E`、`4523 CGCS2000_3度带_120E`。
+**常用坐标系预置**：`4326 WGS84`、`3857 Web Mercator`、`4490 CGCS2000`、`4548 CGCS2000_3度带_117E`、`4549 CGCS2000_3度带_120E`（注意：4547=114°E、4550=123°E；编码一律以 `arcpy.SpatialReference(code).name` 实测为准）。
 
 ---
 
