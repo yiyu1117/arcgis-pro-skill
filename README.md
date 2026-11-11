@@ -36,8 +36,8 @@ git clone https://github.com/yiyu1117/arcgis-pro-skill.git ~/.claude/skills/arcg
 
 安装后**首次使用前**，搜索本机 arcpy 解释器路径并填入技能目录的 `config.json`：
 
-1. 查询注册表 `HKLM\SOFTWARE\ESRI\ArcGIS Pro`；
-2. 检索常见安装路径下的 `*Pro/bin/Python/envs/*/python.exe`；
+1. 查询注册表 `HKLM\SOFTWARE\ESRI\ArcGISPro`，由 `PythonCondaRoot` + `PythonCondaEnv` 拼出 `<root>\envs\<env>\python.exe`（Git Bash 中 `/s` 写作 `//s`）；
+2. 若注册表不可用，检索常见安装路径下的 `*Pro/bin/Python/envs/*/python.exe`（同时覆盖 ArcGIS Pro 与 GeoScene Pro）；
 3. 将找到的 `python.exe` 完整路径写入 `config.json` 的 `python_path`（可复制 [`config.json.template`](config.json.template) 后修改）。
 
 **之后每次运行直接读取 `config.json`，不再重复检测。** 仅当路径失效（文件不存在 / `import arcpy` 失败）时重新检测。`config.json` 已被 `.gitignore` 忽略，不会进入仓库。
@@ -57,7 +57,7 @@ git clone https://github.com/yiyu1117/arcgis-pro-skill.git ~/.claude/skills/arcg
 
 技能把 ArcGIS 批处理的最佳实践固化成几条硬规则，让每次执行又快、又稳、又可复现：
 
-1. **三种执行模式** —— 任务开始时由你选择：**单步**（每步停下确认，最稳）、**连续**（每步独立执行、阶段结束确认，常规推荐）、**合并（PTC）**（把一个阶段合成一个脚本跑，最快）；从其他任务唤起时默认连续，不打断父流程；
+1. **三种执行模式** —— 执行单元 ≥2 时由你选择：**单步**（每步停下确认，最稳）、**连续**（每步独立执行、阶段结束确认，常规推荐）、**合并（PTC）**（把一个阶段合成一个脚本跑，最快）；单执行单元任务直接执行；从其他任务唤起时默认连续，不打断父流程；
 2. **声明先行** —— 每步操作前先显示 `【工具名】输入=…，参数=…`，你随时能核对它在干什么；
 3. **计划先确认** —— 拆解出的计划先整体确认；之后按模式在每步或每个阶段暂停，不会闷头跑偏；
 4. **多机器自适应** —— 解释器路径**首次安装时搜索一次并写入 `config.json`**，之后每次直接读取、不重复检测；ArcGIS Pro 与 GeoScene Pro 都支持（两者互斥、单机至多一个）；
@@ -82,13 +82,13 @@ git clone https://github.com/yiyu1117/arcgis-pro-skill.git ~/.claude/skills/arcg
 
 ## 快速开始
 
-装好技能后，直接在 Claude Code 里用自然语言描述任务。技能会先拆解任务、给出 To Do 计划等你确认，然后询问执行模式：
+装好技能后，直接在 Claude Code 里用自然语言描述任务。技能会先拆解任务、给出 To Do 计划等你确认，然后（执行单元 ≥2 时）询问执行模式：
 
 - **单步**：每执行一步就停下报告，适合高风险操作；
 - **连续**：每步独立执行但不逐步暂停，每个阶段结束停下确认，适合常规任务；
 - **合并（PTC）**：把一个阶段合成一个脚本连续跑，速度最快，适合步骤多、逻辑明确的任务。
 
-执行中随时可以说「切单步 / 切连续 / 切合并」切换模式。如果本技能是被其他任务中途唤起（例如别的流程里顺手处理地理数据），会默认连续执行、不打断父流程。具体规则见 `SKILL.md`。
+执行中随时可以说「切单步 / 切连续 / 切合并」切换模式；切到合并从下一个 To Do 阶段生效。如果本技能是被其他任务中途唤起（例如别的流程里顺手处理地理数据），会默认连续执行、不打断父流程。具体规则见 `SKILL.md`。
 
 **示例 1：格式转换**
 > 把 `中国_省.geojson` 里的转为 shapefile ,提取河北省+投影到CGCS20003度带117E（图中为多任务处理的to do 1）。
@@ -119,19 +119,27 @@ git clone https://github.com/yiyu1117/arcgis-pro-skill.git ~/.claude/skills/arcg
 
 ## 支持的能力范围
 
-技能内置了覆盖三大类约 30 个常用工具的**签名速查表**；冷门工具会通过联网搜索查官方文档（`site:pro.arcgis.com`）。
+技能内置了覆盖数据管理、矢量分析、格式转换、空间分析四类共 **47 个常用工具**的**签名速查表**（另有游标 / NumPy 接口）；冷门工具会通过联网搜索查官方文档（`site:pro.arcgis.com`）。
 
 ### 数据管理
 
-缓冲、裁剪（矢量/栅格）、属性选择、投影（矢量/栅格）、定义投影、重采样、合并要素、镶嵌栅格、添加字段、字段计算、XY 转点、建文件 GDB 等。
+缓冲、裁剪（矢量/栅格）、属性选择、复制要素、投影（矢量/栅格）、定义投影、重采样、合并要素、追加、镶嵌栅格、修复几何、多部件转单部件、添加字段、字段计算、XY 转点、建文件 GDB 等。
+
+> ⚠ 追加、添加字段、字段计算、定义投影、修复几何属于**就地修改**，执行前先把目标复制到过程目录。
+
+### 矢量分析
+
+空间连接、融合、要素转点、面转线、邻近分析、按位置选择、汇总统计、排序等。
+
+> ⚠ 邻近分析（Near）会就地给输入要素添加字段，执行前先复制。
 
 ### 格式转换
 
-`shp → gdb`、要素 → geojson、geojson → 要素、`excel → 表`、`表 → excel`、`kml → 图层` 等。
+`shp → gdb`、要素 → geojson、geojson → 要素、`excel → 表`、`表 → excel`、`表 → CSV`、`kml → 图层`、面 → 栅格、栅格 → 面、复制栅格等。
 
 ### 空间分析（需 Spatial 扩展）
 
-坡度、按掩膜提取、重分类、欧氏距离、栅格取整等。
+坡度、坡向、山影、按掩膜提取、重分类、欧氏距离、条件、栅格计算器、提取值至点、采样、栅格取整等。
 
 ### 游标 / NumPy
 
@@ -147,7 +155,7 @@ git clone https://github.com/yiyu1117/arcgis-pro-skill.git ~/.claude/skills/arcg
 |------|------|
 | `SKILL.md` | **技能主文件**：触发描述、执行流程、工具签名速查、错误处理、产物组织 |
 | `CONTEXT.md` | **领域模型与设计动机**：解释器跨机器配置、核心概念术语表 |
-| `verify_sigs.py` | 用本机 arcpy 官方 doc 核对 `SKILL.md` 工具签名表的脚本 |
+| `verify_sigs.py` | 解析 `SKILL.md`「工具签名速查」章节，检查每个 arcpy 调用是否存在，并打印真实签名供人工核对；改表后运行一次 |
 | `config.json.template` | 解释器配置文件模板（本机实际配置写入 `config.json`，被 `.gitignore` 忽略） |
 
 

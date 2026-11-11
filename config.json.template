@@ -1,6 +1,6 @@
 {
   "python_path": "<首次安装时搜索 arcpy 解释器位置并填入此处>",
-  "arcgis_version": "3.5.4",
-  "license": "ArcInfo",
+  "arcgis_version": "<按本机 arcpy.GetInstallInfo()['Version'] 填写，如 3.5.4>",
+  "license": "<按本机 arcpy.GetInstallInfo()['LicenseLevel'] 填写，如 Advanced>",
   "note": "首次安装时搜索并填入真实路径（ArcGIS Pro 与 GeoScene Pro 互斥）。之后每次直接读取，不再检测；若此路径在本机失效，按 SKILL.md「解释器路径」一节重新检测。"
 }
